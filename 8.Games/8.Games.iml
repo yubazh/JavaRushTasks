@@ -27,5 +27,6 @@
         <jarDirectory url="file://$MODULE_DIR$/../../Program Files/JetBrains/Jackson" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="junit:junit:4.12" level="project" />
   </component>
 </module>

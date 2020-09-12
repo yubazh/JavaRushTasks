@@ -19,6 +19,7 @@ public class Solution {
 
     public void recurse(final String expression, int countOperation) {
         //implement
+        System.out.println("testing");
     }
 
     public Solution() {
