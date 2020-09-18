@@ -9,10 +9,34 @@ public class Solution implements Action {
     private int param;
 
     private Action solutionAction = new Action() {
-        //напишите тут ваш код
+        //!!!!! Changes can be here
+        //!!!!! Изменения могут быть тут
 
         public void someAction() {
-            //напишите тут ваш код
+            //!!!!! All changes have to be here
+            //!!!!! Все изменения должны быть только тут
+            FirstClass firstClass;
+            SecondClass secondClass = new SecondClass();
+
+            if (param>0){
+                firstClass = new FirstClass() {
+                    @Override
+                    public Action getDependantAction() {
+                        while (param>0){
+                            System.out.println(param--);
+                        }
+                        super.someAction();
+                        return new Action() {
+                            @Override
+                            public void someAction() {
+                            }
+                        };
+                    }
+                };
+                firstClass.getDependantAction();
+            }
+            secondClass.someAction();
+            System.out.println(SecondClass.SPECIFIC_ACTION_FOR_ANONYMOUS_SECOND_CLASS_PARAM.replaceAll("\n","") + param);
         }
     };
 

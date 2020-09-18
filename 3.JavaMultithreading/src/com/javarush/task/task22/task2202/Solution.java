@@ -1,20 +1,29 @@
 package com.javarush.task.task22.task2202;
 
-/* 
-Найти подстроку
-*/
+import java.text.NumberFormat;
+
+import java.util.Hashtable;
+
+/*
+Найти подстроку */
+
+
 public class Solution {
+
+
     public static void main(String[] args) {
-        System.out.println(getPartOfString("JavaRush - лучший сервис обучения Java."));
-    }
-
-    public static String getPartOfString(String string) {
-        if (string == null) throw new TooShortStringException();
-        String[] result = string.split(" ");
-        if (result.length < 5) throw new TooShortStringException();
-        return result[1] + " " + result[2] + " " + result[3] + " " + result[4];
-    }
-
-    public static class TooShortStringException extends RuntimeException {
+      byte k = 0;
+      switch(k) {
+          default:
+              int h = 3;
+              System.out.println(h);
+              break;
+          case 0:
+              int h = 7;
+              System.out.println(h);
+          case 1:
+              int h = 11;
+              System.out.println(h);
+      }
     }
 }
