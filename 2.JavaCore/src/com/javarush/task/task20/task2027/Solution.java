@@ -1,9 +1,23 @@
 package com.javarush.task.task20.task2027;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-/* 
+/*
 Кроссворд
+1. Дан двумерный массив, который содержит буквы английского алфавита в нижнем регистре.
+2. Метод detectAllWords должен найти все слова из words в массиве crossword.
+3. Элемент(startX, startY) должен соответствовать первой букве слова, элемент(endX, endY) — последней.
+text — это само слово, располагается между начальным и конечным элементами
+4. Все слова есть в массиве.
+5. Слова могут быть расположены горизонтально, вертикально и по диагонали как в нормальном, так и в обратном порядке.
+6. Метод main не участвует в тестировании.
+Требования:
+1. В классе Solution должен существовать метод detectAllWords.
+2. В классе Solution должен существовать класс Word.
+3. Метод detectAllWords должен быть статическим.
+4. Метод detectAllWords должен быть публичным.
+5. Метод detectAllWords должен возвращать список всех слов в кроссворде (согласно условию задачи).
 */
 public class Solution {
     public static void main(String[] args) {
@@ -14,8 +28,9 @@ public class Solution {
                 {'m', 'l', 'p', 'r', 'r', 'h'},
                 {'p', 'o', 'e', 'e', 'j', 'j'}
         };
-        List<Word> listWord = detectAllWords(crossword, "home", "same");
-        System.out.println(listWord);
+
+        detectAllWords(crossword, "home", "same");
+        //detectAllWords(crossword, "leo","rre");
         /*
 Ожидаемый результат
 home - (5, 3) - (2, 0)
@@ -23,190 +38,184 @@ same - (1, 1) - (4, 1)
          */
     }
 
+
+    public static Word checkNE(int[][] crossword, int startX, int startY, String s) {
+        int x = startX - 1;
+        int y = startY - 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (x < 0 || y < 0)
+                return null;
+
+            if ((char) crossword[y][x] != s.charAt(i))
+                return null;
+            x--;
+            y--;
+        }
+        Word w = new Word(s);
+        w.setStartPoint(startX, startY);
+        w.setEndPoint(x + 1, y + 1);
+        return w;
+    }
+
+    public static Word checkN(int[][] crossword, int startX, int startY, String s) {
+        int x = startX;
+        int y = startY - 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (y < 0)
+                return null;
+
+            if ((char) crossword[y][x] != s.charAt(i))
+                return null;
+            y--;
+        }
+        Word w = new Word(s);
+        w.setStartPoint(startX, startY);
+        w.setEndPoint(x, y + 1);
+        return w;
+    }
+
+    public static Word checkNW(int[][] crossword, int startX, int startY, String s) {
+        int x = startX + 1;
+        int y = startY - 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (x >= crossword[0].length || y < 0)
+                return null;
+
+            if ((char) crossword[y][x] != s.charAt(i))
+                return null;
+            x++;
+            y--;
+        }
+        Word w = new Word(s);
+        w.setStartPoint(startX, startY);
+        w.setEndPoint(x - 1, y + 1);
+        return w;
+    }
+
+
+    public static Word checkE(int[][] crossword, int startX, int startY, String s) {
+        int x = startX + 1;
+        int y = startY;
+        for (int i = 1; i < s.length(); i++) {
+            if (x >= crossword[0].length)
+                return null;
+
+            if ((char) crossword[y][x] != s.charAt(i))
+                return null;
+            x++;
+        }
+        Word w = new Word(s);
+        w.setStartPoint(startX, startY);
+        w.setEndPoint(x - 1, y);
+        return w;
+    }
+
+    public static Word checkSE(int[][] crossword, int startX, int startY, String s) {
+        int x = startX + 1;
+        int y = startY + 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (x >= crossword[0].length || y >= crossword.length)
+                return null;
+
+            if ((char) crossword[y][x] != s.charAt(i))
+                return null;
+            x++;
+            y++;
+        }
+        Word w = new Word(s);
+        w.setStartPoint(startX, startY);
+        w.setEndPoint(x - 1, y - 1);
+        return w;
+    }
+
+
+    public static Word checkS(int[][] crossword, int startX, int startY, String s) {
+        int x = startX;
+        int y = startY + 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (y >= crossword.length)
+                return null;
+
+            if ((char) crossword[y][x] != s.charAt(i))
+                return null;
+            y++;
+        }
+        Word w = new Word(s);
+        w.setStartPoint(startX, startY);
+        w.setEndPoint(x, y - 1);
+        return w;
+    }
+
+    public static Word checkSW(int[][] crossword, int startX, int startY, String s) {
+        int x = startX - 1;
+        int y = startY + 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (x < 0 || y >= crossword.length)
+                return null;
+
+            if ((char) crossword[y][x] != s.charAt(i))
+                return null;
+            x--;
+            y++;
+        }
+        Word w = new Word(s);
+        w.setStartPoint(startX, startY);
+        w.setEndPoint(x + 1, y - 1);
+        return w;
+    }
+
+    public static Word checkW(int[][] crossword, int startX, int startY, String s) {
+        int x = startX - 1;
+        int y = startY;
+        for (int i = 1; i < s.length(); i++) {
+            if (x < 0 || y >= crossword[0].length)
+                return null;
+
+            if ((char) crossword[y][x] != s.charAt(i))
+                return null;
+            x--;
+        }
+        Word w = new Word(s);
+        w.setStartPoint(startX, startY);
+        w.setEndPoint(x + 1, y);
+        return w;
+    }
+
+
     public static List<Word> detectAllWords(int[][] crossword, String... words) {
-        List<Word> retur = new ArrayList<>();
+        ArrayList<Word> resWords = new ArrayList<>();
 
         for (String word : words) {
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 6; j++) {
-                    if (crossword[i][j] == word.charAt(0)) {
-                        if (proverka1(crossword, i, j, word)) {
-                            Word wordObj = new Word(word);
-                            wordObj.setStartPoint(j, i);
-                            wordObj.setEndPoint(j - 3, i - 3);
-                            retur.add(wordObj);
-                            }
-                        if (proverka2(crossword, i, j, word)) {
-                            Word wordObj = new Word(word);
-                            wordObj.setStartPoint(j, i);
-                            wordObj.setEndPoint(j - 3, i);
-                            retur.add(wordObj);
-                        }
-                        if (proverka3(crossword, i, j, word)) {
-                            Word wordObj = new Word(word);
-                            wordObj.setStartPoint(j, i);
-                            wordObj.setEndPoint(j - 3, i + 3);
-                            retur.add(wordObj);
-                        }
-                        if (proverka4(crossword, i, j, word)) {
-                            Word wordObj = new Word(word);
-                            wordObj.setStartPoint(j, i);
-                            wordObj.setEndPoint(j, i + 3);
-                            retur.add(wordObj);
-                        }
-                        if (proverka5(crossword, i, j, word)) {
-                            Word wordObj = new Word(word);
-                            wordObj.setStartPoint(j, i);
-                            wordObj.setEndPoint(j + 3, i + 3);
-                            retur.add(wordObj);
-                        }
-                        if (proverka6(crossword, i, j, word)) {
-                            Word wordObj = new Word(word);
-                            wordObj.setStartPoint(j, i);
-                            wordObj.setEndPoint(j + 3, i);
-                            retur.add(wordObj);
-                        }
-                        if (proverka7(crossword, i, j, word)) {
-                            Word wordObj = new Word(word);
-                            wordObj.setStartPoint(j, i);
-                            wordObj.setEndPoint(j + 3, i - 3);
-                            retur.add(wordObj);
-                        }
-                        if (proverka8(crossword, i, j, word)) {
-                            Word wordObj = new Word(word);
-                            wordObj.setStartPoint(j, i);
-                            wordObj.setEndPoint(j, i - 3);
-                            retur.add(wordObj);
-                        }
+            char latter = word.charAt(0);
+
+            //Search first latter in the crossword
+            for (int i = 0; i < crossword.length; i++) {
+                for (int j = 0; j < crossword[i].length; j++) {
+
+                    if ((char) crossword[i][j] == latter) { //ok, first latter from word has been finded.
+                        int startX = j;
+                        int startY = i;
+
+                        Word[] vector = new Word[8];
+
+                        vector[0] = checkNE(crossword, startX, startY, word);
+                        vector[1] = checkN(crossword, startX, startY, word);
+                        vector[2] = checkNW(crossword, startX, startY, word);
+                        vector[3] = checkE(crossword, startX, startY, word);
+                        vector[4] = checkSE(crossword, startX, startY, word);
+                        vector[5] = checkS(crossword, startX, startY, word);
+                        vector[6] = checkSW(crossword, startX, startY, word);
+                        vector[7] = checkW(crossword, startX, startY, word);
+
+                        for (int ii = 0; ii < vector.length; ii++)
+                            if (vector[ii] != null)
+                                resWords.add(vector[ii]);
                     }
                 }
             }
-
         }
-
-        return retur;
+        return resWords;
     }
-
-    public static boolean proverka1(int[][] crossword, int x, int y, String word) {
-        if ((x < 3) || (y < 3)) {
-            return false;
-        } else {
-            String word1 = null;
-            word1 = Character.toString((char) crossword[x][y]) + Character.toString((char) crossword[x - 1][y - 1]) + Character.toString((char) crossword[x - 2][y - 2]) + Character.toString((char) crossword[x - 3][y - 3]);
-            if (word.equals(word1)) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    }
-
-    public static boolean proverka2(int[][] crossword, int x, int y, String word) {
-        if ((x < 0) || (y < 3)) {
-            return false;
-        } else {
-            String word1 = null;
-            word1 = Character.toString((char) crossword[x][y]) + Character.toString((char) crossword[x - 1][y]) + Character.toString((char) crossword[x - 2][y]) + Character.toString((char) crossword[x - 3][y]);
-            if (word.equals(word1)) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    }
-
-    public static boolean proverka3(int[][] crossword, int x, int y, String word) {
-        if ((x < 3) || (y > 2)) {
-            return false;
-        } else {
-            String word1 = null;
-            word1 = Character.toString((char) crossword[x][y]) + Character.toString((char) crossword[x - 1][y + 1]) + Character.toString((char) crossword[x - 2][y + 2]) + Character.toString((char) crossword[x - 3][y + 3]);
-            if (word.equals(word1)) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    }
-
-    public static boolean proverka4(int[][] crossword, int x, int y, String word) {
-        if (y > 2) {
-            return false;
-        } else {
-            String word1 = null;
-            word1 = Character.toString((char) crossword[x][y]) + Character.toString((char) crossword[x][y + 1]) + Character.toString((char) crossword[x][y + 2]) + Character.toString((char) crossword[x][y + 3]);
-            if (word.equals(word1)) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    }
-
-    public static boolean proverka5(int[][] crossword, int x, int y, String word) {
-        if ((x > 1) || (y > 2)) {
-            return false;
-        } else {
-            String word1 = null;
-            word1 = Character.toString((char) crossword[x][y]) + Character.toString((char) crossword[x + 1][y + 1]) + Character.toString((char) crossword[x + 2][y + 2]) + Character.toString((char) crossword[x + 3][y + 3]);
-            if (word.equals(word1)) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    }
-
-    public static boolean proverka6(int[][] crossword, int x, int y, String word) {
-        if (x > 1) {
-            return false;
-        } else {
-            String word1 = null;
-            word1 = Character.toString((char) crossword[x][y]) + Character.toString((char) crossword[x + 1][y]) + Character.toString((char) crossword[x + 2][y]) + Character.toString((char) crossword[x + 3][y]);
-            if (word.equals(word1)) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    }
-
-    public static boolean proverka7(int[][] crossword, int x, int y, String word) {
-        if ((x > 1) || (y < 3)) {
-            return false;
-        } else {
-            String word1 = null;
-            word1 = Character.toString((char) crossword[x][y]) + Character.toString((char) crossword[x + 1][y - 1]) + Character.toString((char) crossword[x + 2][y - 2]) + Character.toString((char) crossword[x + 3][y - 3]);
-            if (word.equals(word1)) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    }
-
-    public static boolean proverka8(int[][] crossword, int x, int y, String word) {
-        if (y < 3) {
-            return false;
-        } else {
-            String word1 = null;
-            word1 = Character.toString((char) crossword[x][y]) + Character.toString((char) crossword[x][y - 1]) + Character.toString((char) crossword[x][y - 2]) + Character.toString((char) crossword[x][y - 3]);
-            if (word.equals(word1)) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    }
-
 
     public static class Word {
         private String text;
