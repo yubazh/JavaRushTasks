@@ -19,18 +19,6 @@ public class Solution extends Thread {
 
     public void interrupt() {
         //implement logic here
-        try
-        {
-            socket.close();
-            in.close();
-        }
-        catch (IOException ignored)
-        {
-        }
-        finally
-        {
-            super.interrupt();
-        }
     }
 
     public void run() {
@@ -46,7 +34,8 @@ public class Solution extends Thread {
                     }
                 }
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     public static void main(String[] args) {
