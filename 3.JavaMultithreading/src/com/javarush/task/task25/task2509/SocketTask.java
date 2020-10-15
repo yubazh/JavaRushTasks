@@ -12,13 +12,22 @@ public abstract class SocketTask<T> implements CancellableTask<T> {
         this.socket = socket;
     }
 
-    public synchronized void cancel() {
+    public synchronized void cancel() throws IOException {
         //close all resources here
+        socket.close();
     }
 
     public RunnableFuture<T> newTask() {
         return new FutureTask<T>(this) {
             public boolean cancel(boolean mayInterruptIfRunning) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    super.cancel(mayInterruptIfRunning);
+
+                }
                 //close all resources here by using proper SocketTask method
                 //call super-class method in finally block
                 return false;

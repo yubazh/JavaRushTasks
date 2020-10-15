@@ -1,34 +1,45 @@
 package com.javarush.task.task26.task2601;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
-/*
+/* 
 Почитать в инете про медиану выборки
 */
 public class Solution {
 
     public static void main(String[] args) {
+        Integer[] array = new Integer[] {13, 8, 15, 5, 17};
+        sort(array);
     }
 
     public static Integer[] sort(Integer[] array) {
-
-        //implement logic here
+        double mediana;
         Arrays.sort(array);
-        int len = array.length;
-        int mediana = len % 2 != 0 ? array[len / 2] : (int)((array[len / 2] + array[len / 2 - 1]) / 2);
-
+        if ((array.length % 2) != 0) {
+             mediana = array[(int) Math.floor(array.length / 2)];
+        } else {
+            mediana = (array[array.length / 2] + array[array.length / 2 - 1]) / 2;
+        }
+        System.out.println(mediana);
         Comparator<Integer> comp = new Comparator<Integer>() {
-            public int compare(Integer o1, Integer o2) {
-                return Math.abs(o1 - mediana) - Math.abs(o2 - mediana);
+            @Override
+            public int compare(Integer integer, Integer t1) {
+                double i1 = (integer - mediana);
+                double i2 = (t1 - mediana);
+                return (int) (i1 * i1 - i2 * i2) * 100;
             }
         };
 
-//        то же самое через лямбду
-//        Comparator<Integer> comp = (o1, o2) -> Math.abs(o1 - mediana) - Math.abs(o2 - mediana);
+        Arrays.sort(array, comp);
 
-        ArrayList<Integer> list = new ArrayList<>(Arrays.asList(array));
-        Collections.sort(list, comp);
-        Integer[] rez = list.toArray(new Integer[list.size()]);
-        return rez;
-    };
+        for (Integer i : array) {
+            System.out.println(i);
+        }
+
+
+        //implement logic here
+        return array;
+    }
 }
